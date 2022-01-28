@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+from decouple import config
+
 
 from pathlib import Path
 
@@ -19,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%1hl^rjd=bh!5gxi7my54h^lk7(dk-*y8%4qzgnihf-b+y#u0i'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
+
 
 ALLOWED_HOSTS = []
 
@@ -76,12 +79,15 @@ WSGI_APPLICATION = 'auth.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_db',
-        'USER': 'postgres',
-        'PASSWORD': 'root'
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD')
     }
 }
+
+#DATABASES['default'] = dj_database_url.parse('DATABASE_URL')
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
